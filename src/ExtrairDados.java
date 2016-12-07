@@ -124,7 +124,8 @@ public class ExtrairDados {
 						"         decode(c6c.c6cindts,'N','01','R','02','I','03','M','04','S','05','')         TIPO_SERVICO_CTE,                                                                                                                                    "+
 						"         cux_ass.cuxserie SERIE_CARREGAMENTO_ASSOC,                                                                                                                                "+
 						"         cux_ass.cuxnumde NUMERO_CARREGAMENTO_ASSOC,                                                                                                                                      "+
-						" 		  (select distinct c6p.c6pcdunf from c6pcomet c6p where c6c.c6ccdmer = c6p.c6pcdmer) UNIDADE_MEDIDA,																		"+			
+						" 		  (select distinct c6p.c6pcdunf from c6pcomet c6p where c6c.c6ccdmer = c6p.c6pcdmer) UNIDADE_MEDIDA,																		"+
+						" 		  czw.CZWINPVA IND_NIVEL_ESP_PERFIL_VAG,																		"+
 						"         c6h.c6hdtemi DATA_EMISSAO,                                                                                                                                                "+
 						"         c6h.c6hvltri VALOR_SERVICOS,                                                                                                                                              "+
 						"         c6h.c6htpdes TIPO_CARREGAMENTO,                                                                                                                                           "+
@@ -145,7 +146,7 @@ public class ExtrairDados {
 						"         cue_emitente.cuecdloc IBGE_EMITENTE,                                                                                                                                      "+
 						"         decode(emitente.cli_estado, 'MG','MINAS GERAIS','BA','BAHIA','GO','GOIÁS','ES','ESPÍRITO SANTOS','MT','MATO GROSSO','SP','SÃO PAULO','' ) DESC_ESTADO_EMITENTE,           "+
 						"                                                                                                                                                                                   "+
-						"         emitente.cli_estado COD_ESTADO_EMITENTE,                                                                                                                                  "+
+						"         SUBSTR(emitente.cli_estado,1,2) COD_ESTADO_EMITENTE,                                                                                                                                  "+
 						"         emitente.cli_numero || emitente.cli_estabe || emitente.cli_digito CNPJ_EMITENTE,                                                                                          "+
 						"                                                                                                                                                                                   "+
 						"         emitente.cli_insmun INSC_MUNICIPAL_EMITENTE,                                                                                                                              "+
@@ -157,7 +158,7 @@ public class ExtrairDados {
 						"         c8i.c8iserdf         SERIE_FATURA,                                                                                                                                        "+
 						"         c8i.c8inrnot         NUMERO_FATURA,                                                                                                                                       "+
 						"         c8i.c8idtemi         DATA_FATURA,                                                                                                                                         "+
-						"         czw.czwindct         TIPO_DOC_FISCAL,                                                                                                                                    "+
+						"         decode(czw.czwindct,'E','57','T','06','')         TIPO_DOC_FISCAL,                                                                                                                                    "+
 						"         c8n.c8nstats         STATUS_FATURA,                                                                                                                                       "+
 						"         c8i.c8ichcte         CHAVE_CTE,                                                                                                                                           "+
 						"                                                                                                                                                                                   "+
@@ -172,7 +173,7 @@ public class ExtrairDados {
 						"         decode(remetente.cli_estado, 'MG','MINAS GERAIS','BA','BAHIA','GO','GOIÁS','ES','ESPÍRITO SANTOS','MT','MATO GROSSO','SP','SÃO PAULO','' )  DESC_ESTADO_REMETENTE,        "+
 						"                                                                                                                                                                                   "+
 						"                                                                                                                                                                                   "+
-						"         remetente.cli_estado COD_ESTADO_REMETENTE,                                                                                                                                "+
+						"         SUBSTR(remetente.cli_estado,1,2) COD_ESTADO_REMETENTE,                                                                                                                                "+
 						"         remetente.cli_numero || remetente.cli_estabe || remetente.cli_digito CNPJ_REMETENTE,                                                                                      "+
 						"         remetente.cli_insmun INSC_MUNICIPAL_REMETENTE,                                                                                                                             "+
 						"         remetente.cli_insest INSC_ESTADUAL_REMETENTE,                                                                                                                             "+
@@ -186,7 +187,7 @@ public class ExtrairDados {
 						"         ClienteOrgUnit_des.Cuecdloc IBGE_DESTINATARIO,                                                                                                                            "+
 						"         decode(destinatario.cli_estado, 'MG','MINAS GERAIS','BA','BAHIA','GO','GOIÁS','ES','ESPÍRITO SANTOS','MT','MATO GROSSO','SP','SÃO PAULO','' ) DESC_ESTADO_DESTINATARIO,   "+
 						"                                                                                                                                                                                   "+
-						"         destinatario.cli_estado COD_ESTADO_DESTINATARIO,                                                                                                                          "+
+						"         SUBSTR(destinatario.cli_estado,1,2) COD_ESTADO_DESTINATARIO,                                                                                                                          "+
 						"         destinatario.cli_numero || destinatario.cli_estabe ||                                                                                                                     "+
 						"         destinatario.cli_digito CNPJ_DESTINATARIO,                                                                                                                                "+
 						"                                                                                                                                                                                   "+
@@ -229,7 +230,7 @@ public class ExtrairDados {
 						"         ClienteOrgUnit_cor.Cuecdloc IBGE_TOMADOR,                                                                                                                                 "+
 						"         decode(ClienteCorrentista.cli_estado, 'MG','MINAS GERAIS','BA','BAHIA','GO','GOIÁS','ES','ESPÍRITO SANTOS','MT','MATO GROSSO','SP','SÃO PAULO','' ) DESC_ESTADO_TOMADOR,  "+
 						"                                                                                                                                                                                   "+
-						"         ClienteCorrentista.cli_estado COD_ESTADO_TOMADOR,                                                                                                                         "+
+						"         SUBSTR(ClienteCorrentista.cli_estado,1,2) COD_ESTADO_TOMADOR,                                                                                                                         "+
 						"         ClienteCorrentista.cli_numero || ClienteCorrentista.cli_estabe ||                                                                                                         "+
 						"         ClienteCorrentista.cli_digito CNPJ_TOMADOR,                                                                                                                               "+
 						"         ClienteCorrentista.cli_insmun INSC_MUNICIPAL_TOMADOR,                                                                                                                    "+
@@ -264,7 +265,7 @@ public class ExtrairDados {
 						"         ClienteOrgUnit_cor.Cuecdloc IBGE_EMISSOR,                                                                                                                                 "+
 						"         decode(ClienteCorrentista.cli_estado, 'MG','MINAS GERAIS','BA','BAHIA','GO','GOIÁS','ES','ESPÍRITO SANTOS','MT','MATO GROSSO','SP','SÃO PAULO','' ) DESC_ESTADO_EMISSOR,  "+
 						"                                                                                                                                                                                   "+
-						"         ClienteCorrentista.cli_estado COD_ESTADO_EMISSOR,                                                                                                                         "+
+						"         SUBSTR(ClienteCorrentista.cli_estado,1,2) COD_ESTADO_EMISSOR,                                                                                                                         "+
 						"         ClienteCorrentista.cli_numero || ClienteCorrentista.cli_estabe ||                                                                                                         "+
 						"         ClienteCorrentista.cli_digito CNPJ_EMISSOR,                                                                                                                               "+
 						"         ClienteCorrentista.cli_insmun INSC_MUNICIPAL_EMISSOR,                                                                                                                    "+
@@ -373,8 +374,8 @@ public class ExtrairDados {
 						"     and czl.czltpras not in ('CNF','VICT','MNF','NCS','NDAS','NCAS','CCF','CTF','VIA','ACC','NCSV','NCM')																			"+		
 						//						"     and trunc(c6h.c6hdtemi) >=  ?                                                                                                                                      			"+
 						//						"     and trunc(c6h.c6hdtemi) <=  ?                                                                                                                                       			"+
-						"     and c6h.c6hserie = '200'                                                                                                                                                       "+
-						"     and c6h.c6hnumde = 161090                                                                                                                                               "+ 
+						"     and c6h.c6hserie = '041'                                                                                                                                                       "+
+						"     and c6h.c6hnumde = 19181                                                                                                                                               "+ 
 						"     ORDER BY DATA_EMISSAO, SERIE_CARREGAMENTO, NUMERO_CARREGAMENTO, VERSAO_CARREGAMENTO                                                                                                                                                            ";
 
 
@@ -402,7 +403,11 @@ public class ExtrairDados {
 				String versao_carregamento 	= rs.getString("VERSAO_CARREGAMENTO");
 				Long   valorServicos     	= rs.getLong("VALOR_SERVICOS");
 				String unidadeMedida	  	= rs.getString("UNIDADE_MEDIDA");
-
+				
+				/*
+				 * Verificação se o carregamento na versão zero tem um crédito total ou substituição. Neste caso o carregamento não será processado
+				 * TODO Verificar se a proxima versao será credito e portanto não será processada
+				 */
 				if(versao_carregamento.equals("0") && !isDocCargaValido(serie,numero,valorServicos,conn))
 				{
 					continue;
@@ -411,6 +416,7 @@ public class ExtrairDados {
 
 
 				boolean isVOF = (rs.getString("IND_EMPRESA_CONTRATADA").equals("VF"));
+				boolean isGenerico = (rs.getString("IND_NIVEL_ESP_PERFIL_VAG").equals("G"));
 
 
 				idCarregamento = getSequence(conn, sequenceCarregamento);
@@ -418,8 +424,8 @@ public class ExtrairDados {
 				try {
 
 					inserirCarregamentos(conn,  idCarregamento,  dataExecuçãoResult, isVOF, rs);
-					inserirServicos(conn, idCarregamento, serie, numero, versao_carregamento);
-					inserirVagoes(conn, idCarregamento, serie, numero, versao_carregamento, unidadeMedida);
+					inserirServicos(conn, idCarregamento, serie, numero, versao_carregamento, unidadeMedida);
+					inserirVagoes(conn, idCarregamento, serie, numero, versao_carregamento, unidadeMedida, isGenerico);
 
 					cont++;
 				}
@@ -914,7 +920,7 @@ public class ExtrairDados {
 			}
 		}
 
-		private void inserirVagoes(Connection conn, Integer idCarregamento, String serie, int numero, String versao, String unidadeMedida) throws SQLException {
+		private void inserirVagoes(Connection conn, Integer idCarregamento, String serie, int numero, String versao, String unidadeMedida, boolean isGenerico) throws SQLException {
 
 
 			String queryVagao	=
@@ -942,7 +948,8 @@ public class ExtrairDados {
 							"	  ,nota_fiscal_carreg.C6JPESOV AS PESO_RATEADO    			   "+
 							"	  ,nota_fiscal_carreg.C6JNUPIN AS PIN_SUFRAMA                  "+
 							"	  ,'' DT_PREV_ENTREGA                                          "+
-							"	  ,nota_fiscal_carreg.c6jtpdoo AS TIPO_NOTA_FISCAL_MERCADORIA  "+
+							"	  ,nota_fiscal_carreg.c6jtpdoo   AS TIPO_NOTA_FISCAL_MERCADORIA  "+
+							"	  ,nota_fiscal_carreg.c6jchave AS CHAVE_MERCADORIA  "+
 							"	  FROM c6hdefet carregamento                                   "+
 							"	  ,C6JNFDET nota_fiscal_carreg                                 "+
 							"	  ,CV7NFVAT nota_vagao                                         "+
@@ -980,7 +987,7 @@ public class ExtrairDados {
 
 				while (rs.next()){
 
-					inserirVagao(conn,  idCarregamento, rs, unidadeMedida);
+					inserirVagao(conn,  idCarregamento, rs, unidadeMedida, isGenerico);
 
 				} 
 			} catch (SQLException e) {
@@ -995,7 +1002,7 @@ public class ExtrairDados {
 
 		}
 
-		private void inserirVagao(Connection conn, Integer idCarregamento, OracleResultSet rs, String unidadeMedida)throws SQLException{
+		private void inserirVagao(Connection conn, Integer idCarregamento, OracleResultSet rs, String unidadeMedida, boolean isGenerico)throws SQLException{
 
 			String insert_vagao = 
 					" INSERT INTO CTE_VAGAO "+
@@ -1023,9 +1030,12 @@ public class ExtrairDados {
 							" DT_PREV_ENTREGA	    ,"+
 							" ID_VAGAO		    	,"+
 							" VOLUME 				,"+
-							" TIPO_NOTA_FISCAL_MERCADORIA 				 )"+
+							" TIPO_NOTA_FISCAL_MERCADORIA,"+
+							" CHAVE_MERCADORIA,"+
+							" TIPO_PESO,"+
+							" PESO_MINIMO)"+
 							" VALUES 				" + 
-							"(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+							"(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 
 			OraclePreparedStatement stmt = null;
@@ -1061,11 +1071,18 @@ public class ExtrairDados {
 				stmt.setString	(21, 	rs.getString("PIN_SUFRAMA"));
 				stmt.setDate	(22, 	rs.getDate("DT_PREV_ENTREGA"));
 				stmt.setInt		(23, 	idVagao);
+				
 				if(unidadeMedida.equals("M3"))
 					stmt.setDouble		(24, 	rs.getDouble("PESO_CALCULADO"));
 				else
 					stmt.setNull		(24, 	0);
+				
 				stmt.setString	(25, 	rs.getString("TIPO_NOTA_FISCAL_MERCADORIA"));
+				stmt.setString	(26, 	rs.getString("CHAVE_MERCADORIA"));
+				stmt.setString	(27, 	isGenerico ? "PR" : "PM");
+				
+				//TODO colocar peso minimo
+				stmt.setNull	(28, 	0);
 
 				stmt.execute();
 
@@ -1079,7 +1096,7 @@ public class ExtrairDados {
 			}
 		}
 
-		private void inserirServico(Connection conn, Integer idCarregamento, OracleResultSet rs)throws SQLException{
+		private void inserirServico(Connection conn, Integer idCarregamento, OracleResultSet rs, String unidadeMedida)throws SQLException{
 
 
 			String insert_servico = "INSERT INTO " + 
@@ -1115,7 +1132,7 @@ public class ExtrairDados {
 				stmt.setInt(1, idCarregamento);
 				stmt.setString(2, rs.getString("COD_SERVICO"));
 				stmt.setString(3,  rs.getString("DESCRICAO"));
-				stmt.setString(4, rs.getString("UNIDADE_MEDIDA"));
+				stmt.setString(4, unidadeMedida);
 				stmt.setDouble(5, rs.getDouble("PESO_CALCULO"));
 				stmt.setDouble(6, rs.getDouble("TARIFA_UNIT_S_IMPOSTO"));
 				stmt.setDouble(7, rs.getDouble("VALOR_SERVICO"));
@@ -1144,7 +1161,7 @@ public class ExtrairDados {
 			}
 		}
 
-		private void inserirServicos(Connection conn, Integer idCarregamento, String serie, int numero, String versao) throws SQLException {
+		private void inserirServicos(Connection conn, Integer idCarregamento, String serie, int numero, String versao, String unidadeMedida) throws SQLException {
 
 
 			String consultar_servico = " select carregamento.c6hserie as SERIE,								 "+
@@ -1276,7 +1293,7 @@ public class ExtrairDados {
 
 				while (rs.next()) {
 
-					inserirServico(conn,  idCarregamento, rs);
+					inserirServico(conn,  idCarregamento, rs, unidadeMedida);
 
 
 				}
