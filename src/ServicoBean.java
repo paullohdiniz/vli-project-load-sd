@@ -1,6 +1,7 @@
 
 public class ServicoBean {
 
+
 	private String idCte;
 	private String serieCar;
 	private String numCar;
