@@ -14,14 +14,14 @@ public class Main {
 	 */
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 
-		try {
-
-			lerArquivo("01/01/2016;01/01/2016");
-
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//
+//			lerArquivo("01/01/2016;01/01/2016");
+//
+//		} catch (ClassNotFoundException e) {
+//			
+//			e.printStackTrace();
+//		}
 
 		for(int i = 0; i < args.length; i++) {
 
@@ -34,7 +34,7 @@ public class Main {
 				lerArquivo(intervaloData);
 
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 
@@ -54,7 +54,7 @@ public class Main {
 		try {
 			extrair.consultarCarregamento();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+		
 			e1.printStackTrace();
 		}
 
@@ -72,7 +72,7 @@ public class Main {
 		try {
 			OracleConnection.closeConnection();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -97,7 +97,7 @@ public class Main {
 
 	public static long getPegaDataAtual(){
 
-		Date data = new Date(System.currentTimeMillis());  
+		// data = new Date(System.currentTimeMillis());  
 		Calendar calendar = Calendar.getInstance();
 
 		return calendar.getTimeInMillis();
