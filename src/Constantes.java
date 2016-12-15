@@ -21,6 +21,7 @@ public class Constantes {
 					"         decode(c6c.c6cindts,'N','01','R','02','I','03','M','04','S','05','')         TIPO_SERVICO_CTE,                                                                                                                                    "+
 					"         cux_ass.cuxserie SERIE_CARREGAMENTO_ASSOC,                                                                                                                                "+
 					"         cux_ass.cuxnumde NUMERO_CARREGAMENTO_ASSOC,                                                                                                                                      "+
+					"         cux_ass.cuxflxce NUMERO_FLUXO_ASSOC,                                                                                                                                      "+
 					" 		  (select distinct c6p.c6pcdunf from c6pcomet c6p where c6c.c6ccdmer = c6p.c6pcdmer) UNIDADE_MEDIDA,																		"+
 					" 		  czw.CZWINPVA IND_NIVEL_ESP_PERFIL_VAG,																		"+
 					"         c6h.c6hdtemi DATA_EMISSAO,                                                                                                                                                "+
@@ -41,7 +42,7 @@ public class Constantes {
 					"         emitente.cli_Bairro BAIRRO_EMITENTE,                                                                                                                                      "+
 					"         emitente.cli_Cidade CIDADE_EMITENTE,                                                                                                                                      "+
 					"         cue_emitente.cuecdloc IBGE_EMITENTE,                                                                                                                                      "+
-					"         decode(emitente.cli_estado, 'MG','MINAS GERAIS','BA','BAHIA','GO','GOIÁS','ES','ESPÍRITO SANTOS','MT','MATO GROSSO','SP','SÃO PAULO','' ) DESC_ESTADO_EMITENTE,           "+
+					"         '' DESC_ESTADO_EMITENTE,           "+
 					"                                                                                                                                                                                   "+
 					"         SUBSTR(emitente.cli_estado,1,2) COD_ESTADO_EMITENTE,                                                                                                                                  "+
 					"         emitente.cli_numero || emitente.cli_estabe || emitente.cli_digito CNPJ_EMITENTE,                                                                                          "+
@@ -67,7 +68,7 @@ public class Constantes {
 					"         remetente.Cli_Cidade CIDADE_REMETENTE,                                                                                                                                    "+
 					"                                                                                                                                                                                   "+
 					"         ClienteOrgUnit_rem.Cuecdloc IBGE_REMETENTE,                                                                                                                               "+
-					"         decode(remetente.cli_estado, 'MG','MINAS GERAIS','BA','BAHIA','GO','GOIÁS','ES','ESPÍRITO SANTOS','MT','MATO GROSSO','SP','SÃO PAULO','' )  DESC_ESTADO_REMETENTE,        "+
+					"         ''  DESC_ESTADO_REMETENTE,        "+
 					"                                                                                                                                                                                   "+
 					"                                                                                                                                                                                   "+
 					"         SUBSTR(remetente.cli_estado,1,2) COD_ESTADO_REMETENTE,                                                                                                                                "+
@@ -82,7 +83,7 @@ public class Constantes {
 					"         destinatario.Cli_Cidade CIDADE_DESTINATARIO,                                                                                                                              "+
 					"                                                                                                                                                                                   "+
 					"         ClienteOrgUnit_des.Cuecdloc IBGE_DESTINATARIO,                                                                                                                            "+
-					"         decode(destinatario.cli_estado, 'MG','MINAS GERAIS','BA','BAHIA','GO','GOIÁS','ES','ESPÍRITO SANTOS','MT','MATO GROSSO','SP','SÃO PAULO','' ) DESC_ESTADO_DESTINATARIO,   "+
+					"         '' DESC_ESTADO_DESTINATARIO,   "+
 					"                                                                                                                                                                                   "+
 					"         SUBSTR(destinatario.cli_estado,1,2) COD_ESTADO_DESTINATARIO,                                                                                                                          "+
 					"         destinatario.cli_numero || destinatario.cli_estabe ||                                                                                                                     "+
@@ -125,7 +126,7 @@ public class Constantes {
 					"         ClienteCorrentista.Cli_Cidade CIDADE_TOMADOR,                                                                                                                             "+
 					"                                                                                                                                                                                   "+
 					"         ClienteOrgUnit_cor.Cuecdloc IBGE_TOMADOR,                                                                                                                                 "+
-					"         decode(ClienteCorrentista.cli_estado, 'MG','MINAS GERAIS','BA','BAHIA','GO','GOIÁS','ES','ESPÍRITO SANTOS','MT','MATO GROSSO','SP','SÃO PAULO','' ) DESC_ESTADO_TOMADOR,  "+
+					"         '' DESC_ESTADO_TOMADOR,  "+
 					"                                                                                                                                                                                   "+
 					"         SUBSTR(ClienteCorrentista.cli_estado,1,2) COD_ESTADO_TOMADOR,                                                                                                                         "+
 					"         ClienteCorrentista.cli_numero || ClienteCorrentista.cli_estabe ||                                                                                                         "+
@@ -160,7 +161,7 @@ public class Constantes {
 					"         ClienteCorrentista.Cli_Cidade CIDADE_EMISSOR,                                                                                                                             "+
 					"                                                                                                                                                                                   "+
 					"         ClienteOrgUnit_cor.Cuecdloc IBGE_EMISSOR,                                                                                                                                 "+
-					"         decode(ClienteCorrentista.cli_estado, 'MG','MINAS GERAIS','BA','BAHIA','GO','GOIÁS','ES','ESPÍRITO SANTOS','MT','MATO GROSSO','SP','SÃO PAULO','' ) DESC_ESTADO_EMISSOR,  "+
+					"         '' DESC_ESTADO_EMISSOR,  "+
 					"                                                                                                                                                                                   "+
 					"         SUBSTR(ClienteCorrentista.cli_estado,1,2) COD_ESTADO_EMISSOR,                                                                                                                         "+
 					"         ClienteCorrentista.cli_numero || ClienteCorrentista.cli_estabe ||                                                                                                         "+
@@ -267,12 +268,12 @@ public class Constantes {
 					"     and ClienteOrgUnit_des.cueorgid = c8g.c8gorgid                                                                                                                                "+
 					"     and c6h.c6htpdes in ('FER','SUP','CRE','SUB')                                                                                                                                             "+
 					"     and c6h.c6hsitua in ('FA','CO')                                                                                                                                               "+
-					"     and c6h.c6hunico in ('S')                                                                                                                                               		"+
+					//"     and c6h.c6hunico in ('S')                                                                                                                                               		"+
 					"     and czl.czltpras not in ('CNF','VICT','MNF','NCS','NDAS','NCAS','CCF','CTF','VIA','ACC','NCSV','NCM')																			"+		
-					"     and trunc(c6h.c6hdtemi) >=  ?                                                                                                                                      			"+
-					"     and trunc(c6h.c6hdtemi) <=  ?                                                                                                                                       			"+
-					//"     and c6h.c6hserie = '100'                                                                                                                                                       "+
-					//"     and c6h.c6hnumde = 827218                                                                                                                                               "+ 
+					//"     and trunc(c6h.c6hdtemi) >=  ?                                                                                                                                      			"+
+					//"     and trunc(c6h.c6hdtemi) <=  ?                                                                                                                                       			"+
+				    "     and c6h.c6hserie = ?                                                                                                                                              "+
+					"     and c6h.c6hnumde = ?                                                                                                                                               "+ 
 					"     ORDER BY DATA_EMISSAO, SERIE_CARREGAMENTO, NUMERO_CARREGAMENTO, VERSAO_CARREGAMENTO                                                                                                                                                            ";
 	
 	public static String queryInserirCarregamento = 
@@ -391,7 +392,7 @@ public class Constantes {
 			" select carregamento.c6hserie as SERIE,								 "+
 					"		   carregamento.c6hnumde as CARREGAMENTO,                                        "+
 					"	       carregamento.c6hnumat as VERSAO,                                              "+
-					"	       decode(servico_carregamento.c6bcdfde,'03','EFVM','04','EFC','06','FCA','12','FNS','07','MRS','ND') as FERROVIA_SERVICO,                                                                             "+
+					"	       decode(servico_carregamento.c6bcdfer,'03','EFVM','04','EFC','06','FCA','12','FNS','07','MRS','ND') as FERROVIA_SERVICO,                                                                             "+
 					"	       servico_carregamento.C6BCDTPS as COD_SERVICO,                                 "+
 					"	       desc_servico.C6XDESCR as DESCRICAO,                                           "+
 					"	       '' UNIDADE_MEDIDA,                                                            "+
@@ -504,6 +505,186 @@ public class Constantes {
 					"	   and carregamento.c6hnumat = :versao                                               "
 					;
 	
+	public static String queryConsultarServicos_2 = 
+	        "  select carregamento.c6hserie as SERIE,                                                                                          "+
+	                "    carregamento.c6hnumde as CARREGAMENTO,                                                                                        "+
+	                "      carregamento.c6hnumat as VERSAO,                                                                                            "+
+	                "      decode(servico_carregamento.c6bcdfde,'03','EFVM','04','EFC','06','FCA','12','FNS','07','MRS','ND') as FERROVIA_SERVICO,     "+                                                                       
+	                "      servico_carregamento.C6BCDTPS as COD_SERVICO,                                                                               "+
+	                "      desc_servico.C6XDESCR as DESCRICAO,                                                                                         "+
+	                "      '' UNIDADE_MEDIDA,                                                                                                          "+
+	                "      servico_carregamento.c6bqtdec as PESO_CALCULO,                                                                              "+
+	                "      servico_fluxo.CU3VLSER as TARIFA_UNIT_S_IMPOSTO,                                                                            "+
+	                "      servico_carregamento.C6BVALOR as VALOR_SERVICO,                                                                             "+
+	                "      doc_fiscal.C8IALICM as ALIQUOTA_ICMS,                                                                                       "+
+	                "      doc_fiscal.C8IVLBAS as VALOR_BASE_ICMS,                                                                                     "+
+	                "      doc_fiscal.C8IVLNTR as VALOR_ICMS,                                                                                          "+
+	                "      '' as ALIQUOTA_PIS,                                                                                                         "+
+	                "      '' as VALOR_BASE_PIS,                                                                                                       "+
+	                "      '' as VALOR_PIS,                                                                                                            "+
+	                "      '' as ALIQUOTA_COFINS,                                                                                                      "+
+	                "      '' as VALOR_BASE_COFINS,                                                                                                    "+
+	                "      '' as VALOR_COFINS,                                                                                                         "+
+	                "      '' as VALOR_BASE_COFINS,                                                                                                    "+
+	                "      '' as ALIQUOTA_ISS,                                                                                                         "+
+	                "      '' as VALOR_BASE_ISS,                                                                                                       "+
+	                "      '' as VALOR_ISS                                                                                                             "+
+	                " from c6hdefet carregamento,                                                                                                      "+
+	                "      C6BSEDFT servico_carregamento,                                                                                              "+
+	                "      C6XSERVT desc_servico,                                                                                                      "+
+	                "      cu4heflt fluxo,                                                                                                             "+
+	                "      czwitfet item_ferroviario,                                                                                                  "+
+	                "      CZXPRIFT preco_item,                                                                                                        "+
+	                "      CU3SEFLT servico_fluxo,                                                                                                     "+
+	                "      c6cacsft versao_fluxo,                                                                                                      "+
+	                "      c6fserft servico_versao_fluxo,                                                                                              "+
+	                "      c8sdesft rascunho,                                                                                                          "+
+	                "      c8nsofat solicitacao,                                                                                                       "+
+	                "      c8ifatut doc_fiscal                                                                                                         "+
+	                "                                                                                                                                  "+
+	                "where carregamento.c6hserie = servico_carregamento.c6bserie                                                                       "+
+	                "  and carregamento.c6hnumde = servico_carregamento.c6bnumde                                                                       "+
+	                "  and carregamento.c6hnumat = servico_carregamento.c6bnumat                                                                       "+
+	                "  and servico_carregamento.c6bcdtps = desc_servico.C6XCDTPS                                                                       "+
+	                "  and carregamento.c6hcdflx = fluxo.cu4cdflx                                                                                      "+
+	                "  and fluxo.CU4IDITF = item_ferroviario.CZWIDENT                                                                                  "+
+	                "  and item_ferroviario.CZWIDENT = preco_item.CZXIDITF                                                                             "+
+	                "  and preco_item.CZXident =                                                                                                       "+
+	                "      (select max(x.czxident)                                                                                                     "+
+	                "         from czxprift x                                                                                                          "+
+	                "        where carregamento.c6hcdflx = fluxo.cu4cdflx                                                                              "+
+	                "          and fluxo.CU4IDITF = item_ferroviario.CZWIDENT                                                                          "+
+	                "          and item_ferroviario.CZWIDENT = x.CZXIDITF                                                                              "+
+	                "          and x.czxdativ <= carregamento.c6hdtemi                                                                                 "+
+	                "          and x.czxdattv >= carregamento.c6hdtemi                                                                                 "+
+	                "          and x.czxdtcri <= carregamento.c6hdtcri)                                                                                "+
+	                "  and preco_item.CZXident = servico_fluxo.CU3IDPIF                                                                                "+
+	                "  and fluxo.cu4cdflx = versao_fluxo.c6ccdflx                                                                                      "+
+	                "  and versao_fluxo.c6cident =                                                                                                     "+
+	                "      (select max(y.c6cident)                                                                                                     "+
+	                "         from c6cacsft y                                                                                                          "+
+	                "        where carregamento.c6hcdflx = fluxo.cu4cdflx                                                                              "+
+	                "          and fluxo.cu4cdflx = y.c6ccdflx                                                                                         "+
+	                "          and y.c6cdativ <= carregamento.c6hdtemi                                                                                 "+
+	                "          and y.c6cdattv >= carregamento.c6hdtemi                                                                                 "+
+	                "          and y.c6cdtcri <= carregamento.c6hdtcri)                                                                                "+
+	                "  and versao_fluxo.c6cident = servico_versao_fluxo.c6fideac                                                                       "+
+	                "  and servico_versao_fluxo.c6fcdtps = servico_carregamento.C6BCDTPS                                                               "+
+	                "  and servico_versao_fluxo.c6fcdfer = servico_carregamento.c6bcdfer                                                               "+
+	                "  and servico_versao_fluxo.c6fident = servico_fluxo.cu3idsvf                                                                      "+
+	                "  and carregamento.c6hserie = rascunho.c8sserie                                                                                   "+
+	                "  and carregamento.c6hnumde = rascunho.c8snumde                                                                                   "+
+	                "  and carregamento.c6hnumat = rascunho.c8snumat                                                                                   "+
+	                "  and rascunho.c8sidras = solicitacao.c8nidras                                                                                    "+
+	                "  and solicitacao.c8nidsol = doc_fiscal.c8iidsol                                                                                  "+
+	                "  and carregamento.c6hserie = :serie                                                                                              "+
+	                "  and carregamento.c6hnumde = :carregamento                                                                                       "+
+	                "  and carregamento.c6hnumat = :versao                                                                                              "
+	                ;
+	                  
+
+	public static String queryConsultarServicos_3 = 
+	        "  select carregamento.c6hserie as SERIE,                                                                                             		  "+
+	                "        carregamento.c6hnumde as CARREGAMENTO,                                                                                       "+
+	                "          carregamento.c6hnumat as VERSAO,                                                                                           "+
+	                "          decode(servico_carregamento.c6bcdfer,'03','EFVM','04','EFC','06','FCA','12','FNS','07','MRS','ND') as FERROVIA_SERVICO,    "+    
+	                "          servico_versao_fluxo.c6fident,                                                                                             "+
+	                "          servico_carregamento.C6BCDTPS as COD_SERVICO,                                                                              "+
+	                "          desc_servico.C6XDESCR as DESCRICAO,                                                                                        "+
+	                "          '' UNIDADE_MEDIDA,                                                                                                         "+
+	                "          servico_carregamento.c6bqtdec as PESO_CALCULO,                                                                             "+
+	                "          NVL(servico_carregamento.C6BVALOR/servico_carregamento.c6bqtdec,0) as TARIFA_UNIT_S_IMPOSTO,                               "+
+	                "          servico_carregamento.C6BVALOR as VALOR_SERVICO,                                                                            "+
+	                "          (select impostos.aliq_icms                                                                                                 "+
+	                "             from tcfl_cor_dof impostos2, TCFL_COR_IDF impostos                                                                      "+
+	                "            where impostos2.dof_import_numero =                                                                                      "+
+	                "                  'TCFL' || servicos_tcfl.lodanosl || servicos_tcfl.lodnumsl                                                         "+
+	                "              and impostos2.ID = impostos.DOF_ID) as ALIQUOTA_ICMS,                                                                  "+
+	                "          (select impostos.vl_base_icms                                                                                              "+
+	                "             from tcfl_cor_dof impostos2, TCFL_COR_IDF impostos                                                                      "+
+	                "            where impostos2.dof_import_numero =                                                                                      "+
+	                "                  'TCFL' || servicos_tcfl.lodanosl || servicos_tcfl.lodnumsl                                                         "+
+	                "              and impostos2.ID = impostos.DOF_ID) as VALOR_BASE_ICMS,                                                                "+
+	                "          servicos_tcfl.lodvlicm as VALOR_ICMS,                                                                                      "+
+	                "          (select impostos.VL_ALIQ_PIS                                                                                               "+
+	                "             from tcfl_cor_dof impostos2, TCFL_COR_IDF impostos                                                                      "+
+	                "            where impostos2.dof_import_numero =                                                                                      "+
+	                "                  'TCFL' || servicos_tcfl.lodanosl || servicos_tcfl.lodnumsl                                                         "+
+	                "              and impostos2.ID = impostos.DOF_ID) as ALIQUOTA_PIS,                                                                   "+
+	                "          (select impostos.vl_base_pis                                                                                               "+
+	                "             from tcfl_cor_dof impostos2, TCFL_COR_IDF impostos                                                                      "+
+	                "            where impostos2.dof_import_numero =                                                                                      "+
+	                "                  'TCFL' || servicos_tcfl.lodanosl || servicos_tcfl.lodnumsl                                                         "+
+	                "              and impostos2.ID = impostos.DOF_ID) as VALOR_BASE_PIS,                                                                 "+
+	                "          servicos_tcfl.LODVLPIS as VALOR_PIS,                                                                                       "+
+	                "          (select impostos.VL_ALIQ_COFINS                                                                                            "+
+	                "             from tcfl_cor_dof impostos2, TCFL_COR_IDF impostos                                                                      "+
+	                "            where impostos2.dof_import_numero =                                                                                      "+
+	                "                  'TCFL' || servicos_tcfl.lodanosl || servicos_tcfl.lodnumsl                                                         "+
+	                "              and impostos2.ID = impostos.DOF_ID) as ALIQUOTA_COFINS,                                                                "+
+	                "          (select impostos.vl_base_cofins                                                                                            "+
+	                "             from tcfl_cor_dof impostos2, TCFL_COR_IDF impostos                                                                      "+
+	                "            where impostos2.dof_import_numero =                                                                                      "+
+	                "                  'TCFL' || servicos_tcfl.lodanosl || servicos_tcfl.lodnumsl                                                         "+
+	                "              and impostos2.ID = impostos.DOF_ID) as VALOR_BASE_COFINS,                                                              "+
+	                "          servicos_tcfl.LODVLCOF as VALOR_COFINS,                                                                                    "+
+	                "          (select impostos.vl_base_cofins                                                                                            "+
+	                "             from tcfl_cor_dof impostos2, TCFL_COR_IDF impostos                                                                      "+
+	                "            where impostos2.dof_import_numero =                                                                                      "+
+	                "                  'TCFL' || servicos_tcfl.lodanosl || servicos_tcfl.lodnumsl                                                         "+
+	                "              and impostos2.ID = impostos.DOF_ID) as VALOR_BASE_COFINS,                                                              "+
+	                "           (select impostos.ALIQ_ISS                                                                                                 "+
+	                "             from tcfl_cor_dof impostos2, TCFL_COR_IDF impostos                                                                      "+
+	                "            where impostos2.dof_import_numero =                                                                                      "+
+	                "                  'TCFL' || servicos_tcfl.lodanosl || servicos_tcfl.lodnumsl                                                         "+
+	                "              and impostos2.ID = impostos.DOF_ID) as ALIQUOTA_ISS,                                                                   "+
+	                "          (select impostos.vl_base_ISS                                                                                               "+
+	                "             from tcfl_cor_dof impostos2, TCFL_COR_IDF impostos                                                                      "+
+	                "            where impostos2.dof_import_numero =                                                                                      "+
+	                "                  'TCFL' || servicos_tcfl.lodanosl || servicos_tcfl.lodnumsl                                                         "+
+	                "              and impostos2.ID = impostos.DOF_ID) as VALOR_BASE_ISS,                                                                 "+
+	                "          servicos_tcfl.LODVLISS as VALOR_ISS                                                                                        "+
+	                "       from c6hdefet carregamento,                                                                                                   "+
+	                "          C6BSEDFT servico_carregamento,                                                                                             "+
+	                "          C6XSERVT desc_servico,                                                                                                     "+
+	                "          cu4heflt fluxo,                                                                                                            "+
+	                "          czwitfet item_ferroviario,                                                                                                 "+
+	                "          c6cacsft versao_fluxo,                                                                                                     "+
+	                "          c6fserft servico_versao_fluxo,                                                                                             "+
+	                "          c8sdesft rascunho,                                                                                                         "+
+	                "          c8nsofat solicitacao,                                                                                                      "+
+	                "          LODCPIST servicos_tcfl                                                                                                     "+
+	                "                                                                                                                                     "+
+	                "    where carregamento.c6hserie = servico_carregamento.c6bserie                                                                      "+
+	                "      and carregamento.c6hnumde = servico_carregamento.c6bnumde                                                                      "+
+	                "      and carregamento.c6hnumat = servico_carregamento.c6bnumat                                                                      "+
+	                "      and servico_carregamento.c6bcdtps = desc_servico.C6XCDTPS                                                                      "+
+	                "      and carregamento.c6hcdflx = fluxo.cu4cdflx                                                                                     "+
+	                "      and fluxo.CU4IDITF = item_ferroviario.CZWIDENT                                                                                 "+
+	                "      and fluxo.cu4cdflx = versao_fluxo.c6ccdflx                                                                                     "+
+	                "      and versao_fluxo.c6cident =                                                                                                    "+
+	                "          (select max(y.c6cident)                                                                                                    "+
+	                "             from c6cacsft y                                                                                                         "+
+	                "            where carregamento.c6hcdflx = fluxo.cu4cdflx                                                                             "+
+	                "              and fluxo.cu4cdflx = y.c6ccdflx                                                                                        "+
+	                "              and y.c6cdativ <= carregamento.c6hdtemi                                                                                "+
+	                "              and y.c6cdattv >= carregamento.c6hdtemi                                                                                "+
+	                "              and y.c6cdtcri <= carregamento.c6hdtcri)                                                                               "+
+	                "      and versao_fluxo.c6cident = servico_versao_fluxo.c6fideac                                                                      "+
+	                "      and servico_versao_fluxo.c6fcdtps = servico_carregamento.C6BCDTPS                                                              "+
+	                "      and servico_versao_fluxo.c6fcdfer = servico_carregamento.c6bcdfer                                                              "+
+	                "      and carregamento.c6hserie = rascunho.c8sserie                                                                                  "+
+	                "      and carregamento.c6hnumde = rascunho.c8snumde                                                                                  "+
+	                "      and carregamento.c6hnumat = rascunho.c8snumat                                                                                  "+
+	                "      and rascunho.c8sidras = solicitacao.c8nidras                                                                                   "+
+	                "      and solicitacao.c8nanopr = servicos_tcfl.lodanosl                                                                              "+
+	                "      and solicitacao.c8nnumpr = servicos_tcfl.lodnumsl                                                                              "+
+	                "      and trim(servico_carregamento.C6BCDTPS) = trim(servicos_tcfl.lodcdcpn)                                                         "+
+	                "                                                                                                                                     "+
+	                "      and carregamento.c6hserie = :serie                                                                                             "+
+	                "      and carregamento.c6hnumde = :carregamento                                                                                      "+
+	                "      and carregamento.c6hnumat = :versao                                                                                            "
+	        		;
 	public static String queryIsDocCargaValida = 
 			" select count(1), c6h.c6hvltri as VALOR_SERVICO from c6hdefet c6h, c8sdesft c8s, czlraagt czl  "+
 			" where c6h.c6hcdfer = c8s.c8scdfer                              "+
@@ -577,7 +758,7 @@ public class Constantes {
 	;
 	
 	public static String queryConsultarVagoes = 
-			"	   SELECT carregamento.c6hserie AS serie_carregamento          "+
+			"	   SELECT carregamento.c6hserie AS serie_carregamento          		   "+
 					"	  ,carregamento.c6hnumde AS numero_carregamento                "+
 					"	  ,carregamento.c6hnumat AS atualizacao_carregamento           "+
 					"	  ,serie_vagao.SV_COD_SER AS SERIE_VAGAO                        "+

@@ -14,14 +14,19 @@ public class Main {
 	 */
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 
-//		try {
-//
-//			lerArquivo("01/01/2016;01/01/2016");
-//
-//		} catch (ClassNotFoundException e) {
-//			
-//			e.printStackTrace();
-//		}
+		try {
+
+			lerArquivo("311;8463");
+			//100 840160 145812
+			//102 7256
+			//200 306919 NOK 302394
+			//311 8844 NOK
+			//005 64446 64594
+
+		} catch (ClassNotFoundException e) {
+			
+			e.printStackTrace();
+		}
 
 		for(int i = 0; i < args.length; i++) {
 
@@ -67,8 +72,6 @@ public class Main {
 		System.out.println(dateInicio);
 		System.out.println(dateFinal);
 
-		System.out.println( new SimpleDateFormat( "HH:mm:ss" ).format(calendar.getTime()));
-
 		try {
 			OracleConnection.closeConnection();
 		} catch (SQLException e) {
@@ -93,33 +96,6 @@ public class Main {
 
 
 	}
-
-
-	public static long getPegaDataAtual(){
-
-		// data = new Date(System.currentTimeMillis());  
-		Calendar calendar = Calendar.getInstance();
-
-		return calendar.getTimeInMillis();
-	}
-
-	public static Date getDiferencaData(long dtInicial, long dtFinal) {
-		//Subtraindo os milisegundos, para obter a diferença
-		long milisecondResult = dtFinal - dtInicial;
-		return new Date(milisecondResult);
-	}
-
-	public static Date getDiferencaData(Date dtInicial, Date dtFinal) {
-		//Convertendo as datas para milisegundos
-		long milisecondBegin = dtInicial.getTime();
-		long milisecondEnd = dtFinal.getTime();
-		//Subtraindo os milisegundos, para obter a diferença
-		long milisecondResult = milisecondBegin - milisecondEnd;
-		return new Date(milisecondResult);
-	}
-
-
-
 }
 
 
