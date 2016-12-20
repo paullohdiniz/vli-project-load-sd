@@ -242,7 +242,7 @@ public class ExtrairDados {
 			{
 				stmt.setString  (	3	, rs.getString("SERIE_CARREGAMENTO"));
 				stmt.setInt     (	4	, rs.getInt   ("NUMERO_CARREGAMENTO"));
-				stmt.setString  (	9	, rs.getString("CODIGO_FLUXO"));
+				stmt.setString  (	9	, rs.getString("COD_FLUXO"));
 
 			}
 			else
