@@ -4,103 +4,96 @@ public class Constantes {
 
 	public static String queryCosultarTarifasFluxos = 
 			" SELECT DISTINCT versao_fluxo.c6ccdflx AS CODIGO_FLUXO,                                                                                "+
-					"                 perfil_item.CZNTPPES AS tipo_peso,                                                                                    "+
-					"                 servico_fluxo.c6fcdtps AS codigo_servico,                                                                             "+
-					"                 tipo_servico.c6xdescr AS descricao_servico,                                                                           "+
-					"                 preco_item.czxdativ AS inicio_vigencia,                                                                               "+
-					"                 preco_item.czxdattv AS fim_vigencia,                                                                                  "+
-					"                 valor_servico.cu3vlser AS valor,                                                                                      "+
-					"                 detalhes_vagao.C6EPESMI AS peso_minimo_fixo,                                                                          "+
-					"                 'TO' AS UNIDADE,                                                                                                      "+
-					"                 CAST('' AS VARCHAR2(100)) AS inicio_escala,                                                                           "+
-					"                 CAST('' AS VARCHAR2(100)) AS fim_escala,                                                                              "+
-					"                 CAST(CZVVOLMN AS VARCHAR2(100)) AS inicio_faixa_volume,                                                               "+
-					"                 CAST(CZVVOLMX AS VARCHAR2(100)) AS fim_faixa_volume                                                                   "+
-					"   FROM cu4heflt fluxo,                                                                                                                "+
-					"        CZWITFET item_ferroviario,                                                                                                     "+
-					"        cznvgift perfil_item,                                                                                                          "+
-					"        c6cacsft versao_fluxo,                                                                                                         "+
-					"        C6FSERFT servico_fluxo,                                                                                                        "+
-					"        c6xservt tipo_servico,                                                                                                         "+
-					"        czxprift preco_item,                                                                                                           "+
-					"        cu3seflt valor_servico,                                                                                                        "+
-					"        CZVFAIXT volume,                                                                                                               "+
-					"        c6epevat detalhes_vagao                                                                                                        "+
-					"  WHERE item_ferroviario.czwident = fluxo.cu4iditf                                                                                     "+
-					"    AND item_ferroviario.czwident = perfil_item.Czniditf                                                                               "+
-					"    AND fluxo.cu4cdflx = versao_fluxo.c6ccdflx                                                                                         "+
-					"    AND versao_fluxo.c6cident = servico_fluxo.c6fideac                                                                                 "+
-					"    AND servico_fluxo.c6fcdtps = tipo_servico.c6xcdtps                                                                                 "+
-					"    AND item_ferroviario.czwident = preco_item.czxiditf                                                                                "+
-					"    AND servico_fluxo.c6fident = valor_servico.cu3idsvf                                                                                "+
-					"    AND perfil_item.cznident = detalhes_vagao.c6eidpvg                                                                                 "+
-					"    AND ((preco_item.czxdativ <= sysdate AND preco_item.czxdattv >= to_date('01/01/2014', 'dd/MM/yyyy')) OR                            "+
-					"        preco_item.czxdativ >= to_date('01/01/2014', 'dd/MM/yyyy'))                                                                    "+
-					"    AND ((perfil_item.czndtivg <= sysdate AND                                                                                          "+
-					"        perfil_item.czndttvg >= to_date('01/01/2014', 'dd/MM/yyyy')) OR perfil_item.czndtivg >= to_date('01/01/2014', 'dd/MM/yyyy'))   "+
-					"    AND ((versao_fluxo.c6cdativ <= sysdate AND                                                                                         "+
-					"        versao_fluxo.c6cdattv >= to_date('01/01/2014', 'dd/MM/yyyy')) OR                                                               "+
-					"        versao_fluxo.c6cdativ >= to_date('01/01/2014', 'dd/MM/yyyy'))                                                                  "+
-					"    AND fluxo.cu4situa not in ('A','P')                                                                                                "+
-					"    AND valor_servico.CU3IDFXV = volume.Czvident(+)                                                                                    "+
-					"    AND fluxo.cu4cdflx = :fluxo                                                                                                      ";
+			"                 decode(item_ferroviario.czwinpva,'G','PR','E','PM') TIPO_PESO,                                                                  "+
+			"                 servico_fluxo.c6fcdtps AS codigo_servico,                                                                             "+
+			"                 DECODE(servico_fluxo.c6fcdfer,'02','ALLMP','03','EFVM','04','EFC','06','FCA','12','FNS','07','MRS','ND') AS cod_ferrovia_servico,    "+
+			"                 tipo_servico.c6xdescr AS descricao_servico,                                                                           "+
+			"                 preco_item.czxdativ AS inicio_vigencia,                                                                               "+
+			"                 preco_item.czxdtcri AS data_criacao,                                                                               "+
+			"                 preco_item.czxdattv AS fim_vigencia,                                                                                  "+
+			"                 valor_servico.cu3vlser AS valor,                                                                                      "+
+			"                 '' AS peso_minimo_fixo,                                                                          "+
+			"                 'TO' AS UNIDADE,                                                                                                      "+
+			"                 CAST('' AS VARCHAR2(100)) AS inicio_escala,                                                                           "+
+			"                 CAST('' AS VARCHAR2(100)) AS fim_escala,                                                                              "+
+			"                 CAST(CZVVOLMN AS VARCHAR2(100)) AS inicio_faixa_volume,                                                               "+
+			"                 CAST(CZVVOLMX AS VARCHAR2(100)) AS fim_faixa_volume                                                                   "+
+			"   FROM cu4heflt fluxo,                                                                                                                "+
+			"        CZWITFET item_ferroviario,                                                                                                     "+
+			"        c6cacsft versao_fluxo,                                                                                                         "+
+			"        C6FSERFT servico_fluxo,                                                                                                        "+
+			"        c6xservt tipo_servico,                                                                                                         "+
+			"        czxprift preco_item,                                                                                                           "+
+			"        cu3seflt valor_servico,                                                                                                        "+
+			"        CZVFAIXT volume                                                                                                               "+
+			"  WHERE item_ferroviario.czwident = fluxo.cu4iditf                                                                                     "+
+			"    AND fluxo.cu4cdflx = versao_fluxo.c6ccdflx                                                                                         "+
+			"    AND versao_fluxo.c6cident = servico_fluxo.c6fideac                                                                                 "+
+			"    AND servico_fluxo.c6fcdtps = tipo_servico.c6xcdtps                                                                                 "+
+			"    AND item_ferroviario.czwident = preco_item.czxiditf                                                                                "+
+			"    AND servico_fluxo.c6fident = valor_servico.cu3idsvf                                                                                "+
+			"    AND valor_servico.CU3IDFXV = volume.Czvident(+)                                                                                    "+
+			"    AND preco_item.czxident    = valor_servico.cu3idpif(+)                                                                                    "+
+			"    AND ((preco_item.czxdativ <= sysdate AND preco_item.czxdattv >= to_date('01/01/2014', 'dd/MM/yyyy')) OR                            "+
+			"        preco_item.czxdativ >= to_date('01/01/2014', 'dd/MM/yyyy'))                                                                    "+
+			"    AND ((versao_fluxo.c6cdativ <= sysdate AND                                                                                         "+
+			"        versao_fluxo.c6cdattv >= to_date('01/01/2014', 'dd/MM/yyyy')) OR                                                               "+
+			"        versao_fluxo.c6cdativ >= to_date('01/01/2014', 'dd/MM/yyyy'))                                                                  "+
+			"    AND fluxo.cu4situa not in ('A','P')                                                                                                "+
+			
+			"    AND fluxo.cu4cdflx = :fluxo                                                                                                      ";
+	
 	public static String queryCosultarPrecosContratos	= 
 
-			" SELECT DISTINCT versao_contrato.c6tcdcon AS codigo_contrato,                        "+
-					"                 item_ferroviario.czwident AS item_contrato,                         "+
-					"                 perfil_item.CZNTPPES AS tipo_peso,                                  "+
-					"                 'ZPR0' AS cod_servico,                                              "+
-					"                 'Frete Total' AS descricao_servico,                                 "+
-					"                 preco_item.czxdativ AS inicio_vigencia,                             "+
-					"                 preco_item.czxdattv AS fim_vigencia,                                "+
-					"                 serie.SV_COD_SER AS serie_vagao,                                    "+
-					"                 detalhes_vagao.C6EFXINI AS vagao_de,                                "+
-					"                 detalhes_vagao.C6EFXFIM AS vagao_ate,                               "+
-					"                 preco_item.czxprcon AS valor,                                       "+
-					"                 detalhes_vagao.C6EPESMI AS peso_minimo_fixo,                        "+
-					"                 detalhes_vagao.C6epesma AS peso_maximo,                             "+
-					"                 'TO' AS unidade,                                                    "+
-					"                 CAST('' AS VARCHAR2(100)) AS inicio_escala,                         "+
-					"                 CAST('' AS VARCHAR2(100)) AS fim_escala,                            "+
-					"                 CAST(CZVVOLMN AS VARCHAR2(100)) AS inicio_faixa_volume,             "+
-					"                 CAST(CZVVOLMX AS VARCHAR2(100)) AS fim_faixa_volume                 "+
-					"   FROM czohecot           contrato,                                                 "+
-					"        c6tfltrt           versao_contrato,                                          "+
-					"        CZWITFET           item_ferroviario,                                         "+
-					"        cznvgift           perfil_item,                                              "+
-					"        cu4heflt           fluxo,                                                    "+
-					"        c6cacsft           versao_fluxo,                                             "+
-					"        C6FSERFT           servico_fluxo,                                            "+
-					"        c6xservt           tipo_servico,                                             "+
-					"        czxprift           preco_item,                                               "+
-					"        C6EPEVAT           detalhes_vagao,                                           "+
-					"        serie_vagao_unicom serie,                                                    "+
-					"        cu3seflt           valor_servico,                                            "+
-					"        CZVFAIXT           volume                                                    "+
-					"  WHERE contrato.czoident = versao_contrato.c6tidacl                                 "+
-					"    AND ((versao_contrato.c6tdtvad <= sysdate AND                                    "+
-					"        versao_contrato.c6tdatfv >= to_date('01/01/2014', 'dd/MM/yyyy')) OR          "+
-					"        versao_contrato.c6tdtvad >= to_date('01/01/2014', 'dd/MM/yyyy'))             "+
-					"    AND contrato.czoident = item_ferroviario.czwidacl                                "+
-					"    AND item_ferroviario.czwident = perfil_item.Czniditf                             "+
-					"    AND item_ferroviario.czwident = fluxo.cu4iditf                                   "+
-					"    AND fluxo.cu4cdflx = versao_fluxo.c6ccdflx                                       "+
-					"    AND ((versao_fluxo.c6cdativ <= sysdate AND                                       "+
-					"        versao_fluxo.c6cdattv >= to_date('01/01/2014', 'dd/MM/yyyy') AND             "+
-					"        fluxo.cu4situa not in ('A', 'P')) OR                                         "+
-					"        (versao_fluxo.c6cdativ >= to_date('01/01/2014', 'dd/MM/yyyy')))              "+
-					"    AND fluxo.cu4situa not in ('A', 'P')                                             "+
-					"    AND versao_fluxo.c6cident = servico_fluxo.c6fideac                               "+
-					"    AND servico_fluxo.c6fcdtps = tipo_servico.c6xcdtps                               "+
-					"    AND item_ferroviario.czwident = preco_item.czxiditf                              "+
-					"    AND ((preco_item.czxdativ <= sysdate AND                                         "+
-					"        preco_item.czxdattv >= to_date('01/01/2014', 'dd/MM/yyyy')) OR               "+
-					"        preco_item.czxdativ >= to_date('01/01/2014', 'dd/MM/yyyy'))                  "+
-					"    AND perfil_item.cznident = detalhes_vagao.c6eidpvg                               "+
-					"    AND detalhes_vagao.C6EIDSER = serie.SV_ID_SV                                     "+
-					"    AND servico_fluxo.c6fident = valor_servico.cu3idsvf                              "+
-					"    AND valor_servico.CU3IDFXV = volume.Czvident(+)                                  "+
-					"    AND FLUXO.CU4CDFLX = :fluxo                                                     ";
+	        " SELECT DISTINCT                                                           		"+
+	                "                 item_ferroviario.czwident AS item_contrato,               "+         
+	                "                 fluxo.cu4cdflx AS codigo_fluxo,               			"+
+	                "                 perfil_item.CZNTPPES AS tipo_peso,                        "+         
+	                "                 'ZPR0' AS cod_servico,                                    "+         
+	                "                 'Frete Total' AS descricao_servico,                       "+
+	                "                 preco_item.czxdtcri AS data_criacao, 			            "+
+	                "                 preco_item.czxdativ AS inicio_vigencia,                   "+         
+	                "                 preco_item.czxdattv AS fim_vigencia,                      "+         
+	                "                 serie.SV_COD_SER AS serie_vagao,                          "+         
+	                "                 detalhes_vagao.C6EFXINI AS vagao_de,                      "+         
+	                "                 detalhes_vagao.C6EFXFIM AS vagao_ate,                     "+         
+	                "                 preco_item.czxprcon AS valor,                             "+         
+	                "                 detalhes_vagao.C6EPESMI AS peso_minimo_fixo,              "+         
+	                "                 detalhes_vagao.C6epesma AS peso_maximo,                   "+         
+	                "                 'TO' AS unidade,                                          "+         
+	                "                 CAST('' AS VARCHAR2(100)) AS inicio_escala,               "+         
+	                "                 CAST('' AS VARCHAR2(100)) AS fim_escala,                  "+         
+	                "                 CAST(CZVVOLMN AS VARCHAR2(100)) AS inicio_faixa_volume,   "+         
+	                "                 CAST(CZVVOLMX AS VARCHAR2(100)) AS fim_faixa_volume       "+         
+	                "   FROM                                                                    "+
+	                "        CZWITFET           item_ferroviario,                               "+         
+	                "        cznvgift           perfil_item,                                    "+         
+	                "        cu4heflt           fluxo,                                          "+         
+	                "        c6cacsft           versao_fluxo,                                   "+         
+	                "        C6FSERFT           servico_fluxo,                                  "+         
+	                "        c6xservt           tipo_servico,                                   "+         
+	                "        czxprift           preco_item,                                     "+         
+	                "        C6EPEVAT           detalhes_vagao,                                 "+         
+	                "        serie_vagao_unicom serie,                                          "+
+	                "    cu3seflt           valor_servico,                                      "+
+	                "    CZVFAIXT           volume                                              "+
+	                "  WHERE                                                                    "+
+	                "    item_ferroviario.czwident = perfil_item.Czniditf                       "+     
+	                "    AND item_ferroviario.czwident = fluxo.cu4iditf                         "+         
+	                "    AND fluxo.cu4cdflx = versao_fluxo.c6ccdflx                             "+         
+	                "    AND versao_fluxo.c6cident = servico_fluxo.c6fideac                     "+         
+	                "    AND servico_fluxo.c6fcdtps = tipo_servico.c6xcdtps                     "+         
+	                "    AND item_ferroviario.czwident = preco_item.czxiditf                    "+
+	                "    AND valor_servico.CU3IDFXV = volume.Czvident(+)                        "+   
+	                "    AND preco_item.czxident    = valor_servico.cu3idpif(+)                 "+   
+	                "    AND ((preco_item.czxdativ <= sysdate AND                               "+         
+	                "        preco_item.czxdattv >= to_date('01/01/2014', 'dd/MM/yyyy')) OR     "+         
+	                "        preco_item.czxdativ >= to_date('01/01/2014', 'dd/MM/yyyy'))        "+         
+	                "    AND perfil_item.cznident = detalhes_vagao.c6eidpvg                     "+         
+	                "    AND detalhes_vagao.C6EIDSER = serie.SV_ID_SV                           "+         
+	                "    AND servico_fluxo.c6fident = valor_servico.cu3idsvf                    "+         
+	                      
+	                "    AND FLUXO.CU4CDFLX = :fluxo                                           ";
 
 
 	public static String queryCosultarFluxosHeader		= 
@@ -250,7 +243,9 @@ public class Constantes {
 					"    AND (versao_fluxo.C6cdativ <= sysdate AND                                                                                             "+
 					"        versao_fluxo.c6cdattv >= to_date('01/01/2014', 'dd/MM/yyyy')) 																	   "+
 					"    AND acordo.CZOINCON = 'VF'                                                                                                            "+
-					//"    AND fluxo.cu4cdflx in ('A3608','A3300','D0500','C8072','C6250','C7416','E2822')                                                                                                                                      "+
+					//"    AND fluxo.cu4cdfas in ('C9489', 'C9490', 'C9491', 'C9492', 'C9493', 'C9518', 'C9519', 'C9520', 'C9685', 'D9921', 'D9923', 'D9924', 'D9925', 'D9926', 'D9927', 'D9928', 'D9929', 'D9930', 'D9931', 'D9932', 'D9933', 'D9934', 'D9935', 'D9936', 'D9942', 'D9943', 'E0379', 'E0836', 'E0837', 'E1079', 'E1080', 'E1081', 'E1082', 'E1217', 'E1218', 'E1219', 'E1220', 'E1221', 'E1222', 'E1223', 'E1224', 'E1225', 'E1226', 'E1227', 'E1228', 'E1229', 'E1230', 'E1231', 'E1232', 'E1233', 'E1234', 'E1235', 'E1236', 'E1237', 'E1238', 'E1239', 'E1240', 'E1241', 'E1242', 'E1243', 'E1244', 'E1245', 'E1246', 'E1247', 'E1248', 'E1249', 'E1250', 'E1251', 'E1252', 'E1253', 'E1254', 'E1255', 'E1256', 'E1257', 'E1258', 'E1259', 'E1731', 'E1733', 'E1926', 'E2766', 'E2805', 'E3012')                                                                                                                                      "+
+					"    AND versao_fluxo.c6cdtcri >= :dtInicio                                                                                                                                      "+
+					"    AND versao_fluxo.c6cdtcri <= :dtFim                                                                                                                                     "+
 					"    AND fluxo.CU4SITUA not in ('A', 'P')                                                                                                  "+
 					"                                                                                                                                          "+
 					" UNION                                                                                                                                    "+
@@ -401,7 +396,9 @@ public class Constantes {
 					"    AND versao_acordo.c6tcdcon NOT LIKE '%COE%'                                                                                           "+
 					"    AND versao_acordo.c6tcdcon NOT LIKE '%FER/VLI%'                                                                                       "+
 					"    AND fluxo.CU4SITUA not in ('A', 'P')                                                                                                  "+
-					//"    AND fluxo.cu4cdflx in ('A3608','A3300','D0500','C8072','C6250','C7416','E2822')                                                                                                                                      "+
+					//"    AND fluxo.cu4cdflx in ('C9489', 'C9490', 'C9491', 'C9492', 'C9493', 'C9518', 'C9519', 'C9520', 'C9685', 'D9921', 'D9923', 'D9924', 'D9925', 'D9926', 'D9927', 'D9928', 'D9929', 'D9930', 'D9931', 'D9932', 'D9933', 'D9934', 'D9935', 'D9936', 'D9942', 'D9943', 'E0379', 'E0836', 'E0837', 'E1079', 'E1080', 'E1081', 'E1082', 'E1217', 'E1218', 'E1219', 'E1220', 'E1221', 'E1222', 'E1223', 'E1224', 'E1225', 'E1226', 'E1227', 'E1228', 'E1229', 'E1230', 'E1231', 'E1232', 'E1233', 'E1234', 'E1235', 'E1236', 'E1237', 'E1238', 'E1239', 'E1240', 'E1241', 'E1242', 'E1243', 'E1244', 'E1245', 'E1246', 'E1247', 'E1248', 'E1249', 'E1250', 'E1251', 'E1252', 'E1253', 'E1254', 'E1255', 'E1256', 'E1257', 'E1258', 'E1259', 'E1731', 'E1733', 'E1926', 'E2766', 'E2805', 'E3012')                                                                                                                                      "+
+					"    AND versao_fluxo.c6cdtcri >= :dtInicio                                                                                                                                      "+
+					"    AND versao_fluxo.c6cdtcri <= :dtFim                                                                                                                                     "+
 					"    order by cod_contrato, codigo_fluxo                                                                                                   ";
 
 
@@ -425,9 +422,11 @@ public class Constantes {
 			" INICIO_ESCALA, "+
 			" FIM_ESCALA, "+
 			" INICIO_FAIXA_VOLUME, "+
-			" FIM_FAIXA_VOLUME) "+
+			" FIM_FAIXA_VOLUME, "+
+			" CODIGO_FLUXO, "+
+			" DATA_CRIACAO) "+
 			" VALUES "+
-			" (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+			" (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
 
 
@@ -446,9 +445,11 @@ public class Constantes {
 			" INICIO_ESCALA, "+
 			" FIM_ESCALA, "+
 			" INICIO_FAIXA_VOLUME, "+
-			" FIM_FAIXA_VOLUME ) "+
+			" FIM_FAIXA_VOLUME,  "+
+			" DATA_CRIACAO,  "+
+			" COD_FERROVIA_SERVICO ) "+
 			" VALUES "+
-			" (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+			" (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
 	public static String queryInserirFluxosHeader =	" INSERT INTO "+
 			" PLAN_FLUXOS_HEADER "+

@@ -21,18 +21,23 @@ public class ExtrairDadosFluxos {
 	String  info_inicio;
 	String	info_fim;
 
-	private static String nomeLogLoadSD = "vli_FluxosHeader_SD.txt";
-	private static String nomeExcecaoLoadSD	= "vli_Excecao_FluxosHeader_SD.txt";
+	private static String nomeLogLoadSD = "vli_FluxosHeader_SD_";
+	private static String nomeExcecaoLoadSD	= "vli_Excecao_FluxosHeader_SD_";
 
 	private static PrintWriter pwOutPut = null;
 	private static PrintWriter pwException = null;
 
-	public ExtrairDadosFluxos ()
+	public ExtrairDadosFluxos (String[] info)
 	{
 		try {
 
-			pwOutPut = new PrintWriter(new FileOutputStream(nomeLogLoadSD, true), true);
-			pwException = new PrintWriter(new FileOutputStream(nomeExcecaoLoadSD, true), true);
+			this.info_inicio = info[1].toString();
+			this.info_fim    = info[2].toString();
+
+			String sufixoArquivo = this.info_fim.replace("/", "_") + ".txt";
+
+			pwOutPut 	= new PrintWriter(new FileOutputStream(nomeLogLoadSD + sufixoArquivo , true), true);
+			pwException = new PrintWriter(new FileOutputStream(nomeExcecaoLoadSD + sufixoArquivo, true), true);
 
 		} catch (FileNotFoundException e) {
 
@@ -41,12 +46,13 @@ public class ExtrairDadosFluxos {
 
 	}
 
-	private void cosultarPrecosContratos(Connection conn, String fluxo) throws FileNotFoundException, IOException, SQLException{
+	private void cosultarPrecosContratos(Connection conn, String contrato, String fluxo) throws FileNotFoundException, IOException, SQLException{
 
 		String query = Constantes.queryCosultarPrecosContratos;
 
-		OraclePreparedStatement stmt = null;
-		OracleResultSet rs			 = null;
+		OraclePreparedStatement stmtInsert	= null;
+		OraclePreparedStatement stmt 		= null;
+		OracleResultSet rs			 		= null;
 
 		try {
 
@@ -56,43 +62,63 @@ public class ExtrairDadosFluxos {
 
 			rs = (OracleResultSet) stmt.executeQuery();
 
-			if(rs.getRow() > 0)
-			{
-				while (rs.next()) {
-					try {
+			boolean entrou = false;
 
-						inserirPrecosContratos(conn, fluxo, rs);
-					}
-					catch (SQLException e) {
+			stmtInsert = (OraclePreparedStatement) conn.prepareStatement(Constantes.queryInserirPrecosContratos);
 
-						logExceptionWarning(TipoExcecao.ERROR, "Erro ao inserir preco de contrato - " + e.getStackTrace() , fluxo);
-					}
+			while (rs.next()) {
+				try {
+
+					entrou = true;
+
+					inserirPrecosContratos(stmtInsert, conn, contrato, fluxo, rs);
+				}
+				catch (SQLException e) {
+
+					logExceptionWarning(TipoExcecao.ERROR, "Erro ao inserir preco de contrato - " + e.getMessage() , fluxo);
 				}
 			}
-			else
+
+			stmtInsert.executeBatch();
+
+
+			if(!entrou)
 			{
-				logExceptionWarning(TipoExcecao.WARNING, "Erro ao inserir preco de contrato - ", fluxo);
+				logExceptionWarning(TipoExcecao.WARNING, "Não retornou dados preco de contrato - ", fluxo);
 			}
 
+
 		} catch (SQLException e) {
-			logExceptionWarning(TipoExcecao.ERROR, "Erro ao consultar preco de contrato - " + e.getStackTrace() , fluxo);
+			logExceptionWarning(TipoExcecao.ERROR, "Erro ao consultar preco de contrato - " + e.getMessage() , fluxo);
 		}
 		finally
 		{
-			rs.close();
-			stmt.close();
+			try{
+				if(stmtInsert != null){
+					stmtInsert.close();
+				}
+				if(rs != null){
+					rs.close();
+				}
+				if(stmt != null){
+					stmt.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Erro ao inserir preco de contrato : contrato  " + contrato + " fluxo : " + fluxo);
+				logExceptionWarning(TipoExcecao.ERROR, "Erro ao inserir preco de contrato : contrato  " + contrato + " fluxo : " + fluxo , fluxo);
+			}
 		}
 	}
-	private void inserirPrecosContratos(Connection conn, String fluxo, OracleResultSet rs) throws SQLException{
-		String query = Constantes.queryInserirPrecosContratos;
+	private void inserirPrecosContratos(OraclePreparedStatement stmt, Connection conn, String contrato, String fluxo, OracleResultSet rs) throws SQLException{
+		//String query = Constantes.queryInserirPrecosContratos;
 
-		OraclePreparedStatement stmt = null;
+		//OraclePreparedStatement stmt = null;
 
 		try{
 
-			stmt = (OraclePreparedStatement) conn.prepareStatement(query.toString());
+			//stmt = (OraclePreparedStatement) conn.prepareStatement(query.toString());
 
-			stmt.setString 		(1	, rs.getString("CODIGO_CONTRATO"));
+			stmt.setString 		(1	, contrato);
 			stmt.setInt 		(2	, rs.getInt("ITEM_CONTRATO"));
 			stmt.setString 		(3	, rs.getString("TIPO_PESO"));
 			stmt.setString 		(4	, rs.getString("COD_SERVICO"));
@@ -110,16 +136,18 @@ public class ExtrairDadosFluxos {
 			stmt.setString 		(16	, rs.getString("FIM_ESCALA"));
 			stmt.setString 		(17	, rs.getString("INICIO_FAIXA_VOLUME"));
 			stmt.setString 		(18	, rs.getString("FIM_FAIXA_VOLUME"));
+			stmt.setString 		(19	, rs.getString("CODIGO_FLUXO"));
+			stmt.setDate 		(20	, rs.getDate("DATA_CRIACAO"));
 
-			stmt.execute();
+			stmt.addBatch();
 
 		} catch (SQLException e) {
 
-			logExceptionWarning(TipoExcecao.ERROR, "Erro ao inserir preco de contrato - " + e.getStackTrace() , fluxo);
+			logExceptionWarning(TipoExcecao.ERROR, "Erro ao inserir preco de contrato - " + e.getMessage() , fluxo);
 		}
 		finally
 		{
-			stmt.close();
+			//stmt.close();
 		}
 
 	}
@@ -128,6 +156,7 @@ public class ExtrairDadosFluxos {
 
 		String query = Constantes.queryCosultarTarifasFluxos;
 
+		OraclePreparedStatement stmtInsert = null;
 		OraclePreparedStatement stmt = null;
 		OracleResultSet rs			 = null;
 
@@ -139,43 +168,55 @@ public class ExtrairDadosFluxos {
 
 			rs = (OracleResultSet) stmt.executeQuery();
 
-			if(rs.getRow() > 0)
-			{
-				while (rs.next()) {
-					try {
+			boolean entrou = false;
 
-						inserirTarifasFluxos(conn, fluxo, rs);
-					}
-					catch (SQLException e) {
-						logExceptionWarning(TipoExcecao.ERROR, "Erro ao inserir tarifa de fluxo - " + e.getStackTrace() , fluxo);
-					}
+			stmtInsert = (OraclePreparedStatement) conn.prepareStatement(Constantes.queryInserirTarifasFluxos);
+
+			while (rs.next()) {
+				try {
+
+					entrou = true;
+
+					inserirTarifasFluxos(stmtInsert, conn, fluxo, rs);
 				}
-
+				catch (SQLException e) {
+					logExceptionWarning(TipoExcecao.ERROR, "Erro ao inserir tarifa de fluxo - " + e.getMessage() , fluxo);
+				}
 			}
 
-			else
+			stmtInsert.executeBatch();
+
+			if(!entrou)
 			{
-				logExceptionWarning(TipoExcecao.WARNING, "Erro ao inserir tarifa do fluxo - ", fluxo);
+				logExceptionWarning(TipoExcecao.WARNING, "Não retornou dados tarifa do fluxo - ", fluxo);
 			}
-			
+
+
 		} catch (SQLException e) {
-			logExceptionWarning(TipoExcecao.ERROR, "Erro ao consultar tarifa de fluxo - " + e.getStackTrace() , fluxo);
+			logExceptionWarning(TipoExcecao.ERROR, "Erro ao consultar tarifa de fluxo - " + e.getMessage() , fluxo);
 		}
 		finally
 		{
-			rs.close();
-			stmt.close();
+			if(stmtInsert != null){
+				stmtInsert.close();
+			}
+			if(rs != null){
+				rs.close();
+			}
+			if(stmt != null){
+				stmt.close();
+			}
 		}
 	}
 
-	private void inserirTarifasFluxos(Connection conn, String fluxo, OracleResultSet rs)throws SQLException{
-		String query = Constantes.queryInserirTarifasFluxos;
+	private void inserirTarifasFluxos(OraclePreparedStatement stmt, Connection conn, String fluxo, OracleResultSet rs)throws SQLException{
+		//String query = Constantes.queryInserirTarifasFluxos;
 
-		OraclePreparedStatement stmt = null;
+		//OraclePreparedStatement stmt = null;
 
 		try{
 
-			stmt = (OraclePreparedStatement) conn.prepareStatement(query.toString());
+			//stmt = (OraclePreparedStatement) conn.prepareStatement(query.toString());
 
 			stmt.setString 		(1	, rs.getString("CODIGO_FLUXO"));
 			stmt.setString 		(2	, rs.getString("TIPO_PESO"));
@@ -190,17 +231,19 @@ public class ExtrairDadosFluxos {
 			stmt.setString 		(11	, rs.getString("FIM_ESCALA"));
 			stmt.setString 		(12	, rs.getString("INICIO_FAIXA_VOLUME"));
 			stmt.setString 		(13	, rs.getString("FIM_FAIXA_VOLUME"));
-			//stmt.setString 		(14	, rs.getString("FIM_FAIXA_VOLUME"));
+			stmt.setDate 		(14	, rs.getDate("DATA_CRIACAO"));
+			stmt.setString 		(15	, rs.getString("COD_FERROVIA_SERVICO"));
 
-			stmt.execute();
+			//stmt.execute();
+			stmt.addBatch();
 
 		} catch (SQLException e) {
 
-			logExceptionWarning(TipoExcecao.ERROR, "Erro ao inserir tarifa de fluxo - " + e.getStackTrace() , fluxo);
+			logExceptionWarning(TipoExcecao.ERROR, "Erro ao inserir tarifa de fluxo - " + e.getMessage() , fluxo);
 		}
 		finally
 		{
-			stmt.close();
+			//stmt.close();
 		}
 
 	}
@@ -212,11 +255,17 @@ public class ExtrairDadosFluxos {
 		OraclePreparedStatement stmt = null;
 		OracleResultSet rs			 = null;
 
+		String fluxo = null;
+		String contrato = null;
+
 		try {
 
 			logOutPut("INICIO DA CARGA....", null);
 
 			stmt = (OraclePreparedStatement) conn.prepareStatement(query.toString());
+
+			stmt.setStringAtName("dtInicio", info_inicio);
+			stmt.setStringAtName("dtFim", info_fim);
 
 			logOutPut("Iniciando a consulta de Fluxos Header....", null);
 
@@ -224,32 +273,42 @@ public class ExtrairDadosFluxos {
 
 			logOutPut("Termino a consulta de Fluxos Header ....", null);
 
-			String fluxo = null;
 
 			while (rs.next()) {
 				try {
 
-					fluxo = rs.getString("CODIGO_FLUXO");
+					contrato = 	rs.getString("COD_CONTRATO");
+					fluxo = 	rs.getString("CODIGO_FLUXO");
 
 					inserirFluxosHeader(conn, rs);
-					cosultarPrecosContratos(conn, fluxo);
+					cosultarPrecosContratos(conn, contrato, fluxo);
 					cosultarTarifasFluxos(conn, fluxo); 
 
 				}
 				catch (SQLException e) {
-					logExceptionWarning(TipoExcecao.ERROR, "Erro no processamento do fluxo - " + e.getStackTrace() , fluxo);
+					logExceptionWarning(TipoExcecao.ERROR, "Erro no processamento do fluxo - " + e.getMessage() , fluxo);
 				}
 			}
 
 			logOutPut("TERMINO DA CARGA....", null);
 
 		} catch (SQLException e) {
-			logExceptionWarning(TipoExcecao.ERROR, "Erro no processamento do fluxo - " + e.getStackTrace(), null);
+			logExceptionWarning(TipoExcecao.ERROR, "Erro no processamento do fluxo - " + e.getMessage(), null);
 		}
 		finally
 		{
-			rs.close();
-			stmt.close();
+			try{
+				if(rs != null){
+					rs.close();
+				}
+				if(stmt != null){
+					stmt.close();
+				}
+
+			} catch (SQLException e) {
+				System.out.println("Erro  Fluxo : " + fluxo + " Contrato : " + contrato);
+			}
+
 		}
 	}
 
@@ -294,11 +353,13 @@ public class ExtrairDadosFluxos {
 
 		} catch (SQLException e) {
 
-			logExceptionWarning(TipoExcecao.ERROR, "Erro na insercao do fluxo - " + e.getStackTrace() , rs.getString("CODIGO_FLUXO"));
+			logExceptionWarning(TipoExcecao.ERROR, "Erro na insercao do fluxo - " + e.getMessage() , rs.getString("CODIGO_FLUXO"));
 		}
 		finally
 		{
-			stmt.close();
+			if(stmt != null){
+				stmt.close();
+			}
 		}
 	}
 
